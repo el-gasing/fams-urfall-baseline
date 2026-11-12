@@ -1,0 +1,11 @@
+data/
+kerja/
+*.npz
+*.npy
+*.webm
+*.mp4
+*.zip
+__pycache__/
+.venv/
+venv*/
+.DS_Store

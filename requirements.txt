@@ -1,0 +1,11 @@
+# baseline (jalankan_urfall.py, jalankan_fams.py)
+numpy
+pandas
+scipy
+scikit-learn
+pyyaml
+# skeleton 3D FAMS (fams3d/jalankan.py), di server GPU
+torch
+torchvision
+av
+opencv-python

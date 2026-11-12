@@ -1,0 +1,8 @@
+metode,accuracy,precision,sensitivity,specificity,f1,TP,TN,FP,FN,n
+Threshold UFT (>3.52 g),92.86,90.32,93.33,92.5,91.8,28,37,3,2,70
+Threshold LFT (<0.41 g),80.0,73.53,83.33,77.5,78.12,25,31,9,5,70
+Pemicu saja (>3.0 g),94.29,90.62,96.67,92.5,93.55,29,37,3,1,70
+SVM fitur pose saja,65.71,57.89,73.33,60.0,64.71,22,24,16,8,70
+SVM fitur pose + acc,94.29,90.62,96.67,92.5,93.55,29,37,3,1,70
+kNN fitur pose saja,67.14,59.46,73.33,62.5,65.67,22,25,15,8,70
+kNN fitur pose + acc,94.29,90.62,96.67,92.5,93.55,29,37,3,1,70
