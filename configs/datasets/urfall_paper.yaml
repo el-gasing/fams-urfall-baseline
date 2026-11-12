@@ -1,0 +1,6 @@
+# Setting Tabel 2 paper: 30 urutan jatuh + 30 urutan ADL (paper tidak menyebut ADL yang mana;
+# di sini adl-01..30).
+extends: urfall.yaml
+dataset:
+  name: urfall_paper
+  include: ["fall-*", "adl-0*", "adl-1*", "adl-2*", "adl-30"]

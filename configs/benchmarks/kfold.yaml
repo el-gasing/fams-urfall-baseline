@@ -1,0 +1,2 @@
+# GroupKFold 10 fold (per subjek di FAMS), alih-alih LOSO. Supaya skema CV-nya setara dengan UR Fall.
+evaluation: {protocol: group-kfold, folds: 10}

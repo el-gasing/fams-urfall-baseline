@@ -1,0 +1,12 @@
+# Salin ke configs/datasets/<nama>.yaml
+dataset:
+  adapter: my_dataset          # nama yang didaftarkan dengan @register (lihat urfall_bench/datasets/_template.py)
+  name: my_dataset             # nama folder di cache/ dan results/
+  root: data/my_dataset
+  fall_classes: [1]            # id label yang termasuk jatuh
+  classes: {1: jatuh, 2: jalan}
+  # include: ["pola*"]         # opsional: hanya urutan yang id-nya cocok
+  # ...kunci lain di sini tersedia di adapter sebagai self.dcfg[...]
+
+# Pengaturan benchmark juga boleh ditimpa di sini, mis.
+# evaluation: {protocol: loso}

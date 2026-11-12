@@ -1,0 +1,12 @@
+# UR Fall Detection Dataset (Kwolek & Kepski 2014): 30 urutan jatuh + 40 ADL.
+# python -m urfall_bench download -d configs/datasets/urfall.yaml
+dataset:
+  adapter: urfall
+  name: urfall
+  root: data/urfall
+  download_video: true     # unduh juga <seq>-cam0.mp4 (tidak dipakai kode, ~100 MB)
+  download_cam1: false     # unduh juga <seq>-cam1.mp4 (kamera atap, urutan jatuh saja)
+  # include: ["fall-*", "adl-0*"]   # opsional: hanya urutan yang cocok dengan pola glob
+
+# UR Fall tidak punya ID subjek: kelompok CV = urutan, GroupKFold 10 fold
+evaluation: {protocol: group-kfold, folds: 10}

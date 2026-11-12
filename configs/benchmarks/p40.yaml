@@ -1,0 +1,2 @@
+# Seperti kwolek2014.yaml + fitur P40 (proporsi titik < 40 cm dari lantai, ada di dataset UR Fall).
+verify: {features: "+P40"}

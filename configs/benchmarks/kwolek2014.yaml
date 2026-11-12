@@ -1,0 +1,7 @@
+# Protokol paper Kwolek & Kepski (2014): 4 fitur pose, SVM linear + k-NN (k = 5), pemicu 3 g.
+# Sama dengan defaults.yaml; ditulis eksplisit supaya jelas apa yang dipakai sebagai baseline.
+trigger: {threshold_g: 3.0}
+verify: {features: paper}
+models:
+  SVM: {kernel: linear, C: 1.0}
+  kNN: {n_neighbors: 5}

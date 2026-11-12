@@ -1,11 +1,13 @@
-# baseline (jalankan_urfall.py, jalankan_fams.py)
+# benchmark (list, download, inspect, run, report)
 numpy
 pandas
 scipy
 scikit-learn
 pyyaml
-# skeleton 3D FAMS (fams3d/jalankan.py), di server GPU
+# extract-3d (skeleton 3D multi-kamera), di server GPU
 torch
 torchvision
 av
 opencv-python
+# tes
+pytest

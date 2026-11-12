@@ -1,3 +1,0 @@
-metode,accuracy,precision,sensitivity,specificity,f1,TP,TN,FP,FN,n
-Pose per frame (SVM),99.17,98.18,98.39,99.42,98.28,2315,7409,43,38,9805
-Pose per frame (kNN),98.83,98.27,96.81,99.46,97.54,2278,7412,40,75,9805

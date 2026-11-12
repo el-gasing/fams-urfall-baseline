@@ -1,0 +1,43 @@
+# Semua opsi beserta default-nya. File benchmark (-b) dan dataset (-d) hanya menimpa yang berbeda,
+# lalu -s key=value menimpa sisanya. Lihat README §5.
+
+cache_dir: cache        # turunan data (skeleton 3D) -> cache/<dataset>/
+results_dir: results    # hasil run -> results/<dataset>/<run>/
+
+# Tahap akselerometer (Kwolek & Kepski 2014, Bagian 4)
+trigger:
+  threshold_g: 3.0      # SV_total > ambang ini = "potential fall"
+  merge_ms: 1000        # sampel di atas ambang yang berjarak < ini digabung jadi satu pemicu
+
+# Pembanding threshold murni (Tabel 2 paper, dari Bourke et al. 2007, sensor di batang tubuh)
+thresholds:
+  uft_g: 3.52           # jatuh bila max SV_total > UFT   (cek ulang ke paper Bourke 2007)
+  lft_g: 0.41           # jatuh bila min SV_total < LFT   (cek ulang ke paper Bourke 2007)
+
+# Tahap verifikasi pose (Bagian 5-6)
+verify:
+  features: paper       # paper = HeightWidthRatio, HHmaxRatio, D, MaxStdXZ ; +P40 = tambah P40
+  window_s: [0.0, 1.0]  # frame yang dinilai: [t + a, t + b] detik setelah pemicu
+  min_lying_s: 0.5      # mode pose "pose saja": lama berbaring minimum agar dianggap jatuh
+  lying_fraction: 0.5   # mode pose "pose + acc": proporsi frame berbaring minimum di jendela
+
+# Klasifier (parameter diteruskan ke scikit-learn; fitur selalu di-StandardScaler)
+models:
+  SVM: {kernel: linear, C: 1.0}   # paper: LIBSVM linear
+  kNN: {n_neighbors: 5}           # paper: k-NN 5 tetangga sebagai pembanding
+
+# Validasi silang out-of-fold per kelompok (urutan atau subjek, ditentukan adapter)
+evaluation:
+  protocol: group-kfold # group-kfold | loso
+  folds: 10
+
+# Skeleton 3D multi-kamera (perintah extract-3d; dataset tanpa kamera depth)
+pose3d:
+  before_s: 1.0         # klip [t - before_s, t + after_s] di sekitar tiap pemicu
+  after_s: 3.0
+  calib_interval_s: 2.0 # jarak frame untuk kalibrasi diri (seluruh sesi)
+  height_m: 1.65        # tinggi badan untuk skala (perkiraan)
+  rotate: {}            # kamera yang dipasang miring, mis. {cam4: 90}
+  fps: 15               # grid waktu triangulasi
+  device: auto          # auto | cuda | cuda:1 | mps | cpu
+  batch: 4
