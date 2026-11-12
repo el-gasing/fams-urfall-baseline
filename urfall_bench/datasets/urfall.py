@@ -2,8 +2,8 @@
 UR Fall Detection Dataset (Kwolek & Kepski 2014), https://fenix.ur.edu.pl/mkepski/ds/uf.html, CC BY-NC-SA 4.0.
 
 File di ``dataset.root`` (``python -m urfall_bench download -d configs/datasets/urfall.yaml``):
-  <seq>-acc.csv   waktu_ms, SV_total, Ax, Ay, Az (g)
-  <seq>-data.csv  nomor_frame, waktu_ms, SV_total di frame itu (jam sama dengan acc.csv)
+  <seq>-acc.csv   waktu_ms, SV_total, Ax, Az, Ay (g; urutan kolom sesuai halaman dataset, hanya SV_total dipakai)
+  <seq>-data.csv  nomor_frame, waktu_ms, SV_total interpolasi di frame itu (jam sama dengan acc.csv)
   urfall-cam0-falls.csv / urfall-cam0-adls.csv
                   seq, nomor_frame, postur (-1 tidak berbaring, 0 sedang jatuh, 1 berbaring),
                   HeightWidthRatio, MajorMinorRatio, BoundingBoxOccupancy, MaxStdXZ, HHmaxRatio, H, D, P40

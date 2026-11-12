@@ -110,14 +110,16 @@ FAMS
 ### 3.1 UR Fall Detection Dataset (`urfall`)
 
 Sumber: <https://fenix.ur.edu.pl/mkepski/ds/uf.html>, lisensi CC BY-NC-SA 4.0. Isinya 30 urutan jatuh dan
-40 urutan ADL. Direkam dengan 2 Kinect (cam0 depan, cam1 atap) dan akselerometer di pinggang.
+40 urutan ADL. Direkam dengan 2 Kinect: cam0 sejajar lantai, cam1 di langit-langit (urutan ADL hanya
+cam0). Halaman dataset menyebut dua perangkat akselerometer, PS Move (60 Hz) dan x-IMU (256 Hz), tanpa
+merinci perangkat mana yang dipakai per urutan. Paper menyebut x-IMU dipakai di dekat pelvis.
 Unduh dengan `python -m urfall_bench download -d configs/datasets/urfall.yaml`. Video bisa dilewati dengan
 `-s dataset.download_video=false`.
 
 | File | Isi | Dipakai untuk |
 |---|---|---|
-| `<seq>-acc.csv` | `waktu_ms, SV_total, Ax, Ay, Az` (g) | Pemicu, UFT, LFT |
-| `<seq>-data.csv` | `nomor_frame, waktu_ms, SV_total di frame itu`, satu jam dengan `acc.csv` | Waktu tiap frame depth |
+| `<seq>-acc.csv` | `waktu_ms, SV_total, Ax, Az, Ay` (g, urutan kolom sesuai halaman dataset). Yang dipakai hanya kolom SV_total | Pemicu, UFT, LFT |
+| `<seq>-data.csv` | `nomor_frame, waktu_ms, SV_total interpolasi di frame itu`, satu jam dengan `acc.csv` | Waktu tiap frame depth |
 | `urfall-cam0-falls.csv`, `urfall-cam0-adls.csv` | `seq, frame, postur, HeightWidthRatio, MajorMinorRatio, BoundingBoxOccupancy, MaxStdXZ, HHmaxRatio, H, D, P40` | Fitur pose dan label postur |
 | `<seq>-cam0.mp4` | Video RGB (opsional) | Tidak dipakai kode |
 
@@ -368,7 +370,11 @@ Ini berbeda dengan UR Fall (lihat [§11](#11-catatan-metodologi)).
 - **UFT.** Jatuh kalau max SV_total > 3.52 g.
 - **LFT.** Jatuh kalau min SV_total < 0.41 g (fase jatuh bebas).
 
-  Angka UFT/LFT adalah ambang sensor batang tubuh dari Bourke 2007. Paper Kwolek tidak menuliskannya.
+  Angka UFT/LFT diambil dari Bourke *et al.* 2007 untuk sensor di batang tubuh (*trunk*); untuk paha,
+  angkanya 2.74 g / 0.60 g. Paper Kwolek merujuk Bourke tanpa menuliskan angkanya. Di Bourke, ambang
+  diset sama dengan puncak jatuh terkecil di data jatuh mereka. Spesifisitas yang dilaporkan untuk sensor
+  batang tubuh adalah 100% (UFT) dan 91.25% (LFT). Sensor batang tubuh Bourke ada di sternum (dada),
+  sedangkan di UR Fall dan FAMS ambang ini diterapkan ke sensor pinggang.
 
 ### 9.2 Fitur pose UR Fall (paper Bagian 5.3)
 
@@ -379,10 +385,11 @@ Paper memakai 4 fitur yang dihitung dari titik-titik orang di depth map:
 | `HeightWidthRatio` | h/w kotak pembatas orang |
 | `HHmaxRatio` | tinggi sekarang dibagi tinggi orang saat berdiri |
 | `D` | jarak centroid orang ke bidang lantai (lantai dari v-disparity + Hough + RANSAC) |
-| `MaxStdXZ` | max(σx, σz): sebaran titik pada dua sumbu horizontal |
+| `MaxStdXZ` | max(σx, σz): simpangan baku titik orang dari centroid pada sumbu X dan sumbu kedalaman Z (point cloud 3D) |
 
-Halaman dataset juga menyediakan `P40` (proporsi titik < 40 cm dari lantai). P40 tidak dipakai di paper,
-tapi tersedia lewat `p40.yaml`.
+Halaman dataset juga menyediakan `P40`: jumlah titik di dalam kubus setinggi 40 cm di atas lantai, dibagi
+jumlah titik di kubus setinggi tubuh orang itu. P40 tidak dipakai di paper, tapi tersedia lewat
+`p40.yaml`. Kolom lain di CSV (`MajorMinorRatio`, `BoundingBoxOccupancy`, `H`) tidak dipakai.
 
 ### 9.3 Fitur pose FAMS dari skeleton 3D
 
@@ -486,7 +493,7 @@ Metrik (paper Bagian 7):
 | SVM | LIBSVM linear | `sklearn.svm.SVC(kernel="linear", C=1)` | Sama-sama libsvm |
 | Jendela verifikasi | Tidak disebut | [t, t + 1 s] | Banyak urutan jatuh UR Fall berakhir < 0.5 s setelah benturan |
 | Aturan "pose saja" | Tidak dirinci | Berbaring ≥ 0.5 s berturut-turut | |
-| Nilai UFT / LFT | Merujuk Bourke 2007, angkanya tidak ditulis | 3.52 g / 0.41 g (batang tubuh) | **Cek ulang ke paper Bourke** |
+| Nilai UFT / LFT | Merujuk Bourke 2007, angkanya tidak ditulis | 3.52 g / 0.41 g, ambang sensor batang tubuh di Bourke 2007 | Sensor Bourke di sternum; di sini dipakai untuk sensor pinggang |
 | Fitur pose FAMS | Depth map Kinect | Skeleton 3D 4 kamera | FAMS tidak punya kamera depth ([§9.3](#93-fitur-pose-fams-dari-skeleton-3d)) |
 | Mode kandidat | — | Tambahan | FAMS tidak punya label postur per frame |
 
@@ -565,9 +572,10 @@ fams_urfall_baseline/
    accelerometer. *Computer Methods and Programs in Biomedicine*, 117(3):489–501, 2014.
    doi:10.1016/j.cmpb.2014.09.005
 2. A. K. Bourke, J. V. O'Brien, G. M. Lyons. Evaluation of a threshold-based tri-axial accelerometer fall
-   detection algorithm. *Gait & Posture*, 26(2):194–199, 2007.
+   detection algorithm. *Gait & Posture*, 26(2):194–199, 2007. doi:10.1016/j.gaitpost.2006.09.012
 3. UR Fall Detection Dataset. <https://fenix.ur.edu.pl/mkepski/ds/uf.html> (CC BY-NC-SA 4.0).
-4. L. Martínez-Villaseñor *et al.* UP-Fall Detection Dataset: A Multimodal Approach. *Sensors*,
-   19(9):1988, 2019.
-5. K. He, G. Gkioxari, P. Dollár, R. Girshick. Mask R-CNN. *ICCV*, 2017 (dasar Keypoint R-CNN di
+4. L. Martínez-Villaseñor, H. Ponce, J. Brieva, E. Moya-Albor, J. Núñez-Martínez, C. Peñafort-Asturiano.
+   UP-Fall Detection Dataset: A Multimodal Approach. *Sensors*, 19(9):1988, 2019. doi:10.3390/s19091988
+5. K. He, G. Gkioxari, P. Dollár, R. Girshick. Mask R-CNN. *Proc. IEEE International Conference on
+   Computer Vision (ICCV)*, 2961–2969, 2017. doi:10.1109/ICCV.2017.322 (dasar Keypoint R-CNN di
    torchvision).

@@ -4,7 +4,8 @@ Tahap akselerometer (Kwolek & Kepski 2014, Bagian 2.3 dan 4).
   SV_total(t) = sqrt(Ax^2 + Ay^2 + Az^2)        (Persamaan 1)
   SV_total > 3 g  -> "potential fall", lalu tahap verifikasi pose dijalankan.
 
-Pembanding threshold murni (Tabel 2 paper, dari Bourke et al. 2007, Gait & Posture 26(2)):
+Pembanding threshold murni (Tabel 2 paper, dari Bourke et al. 2007, Gait & Posture 26(2):194-199;
+ambang sensor batang tubuh: UFT 3.52 g, LFT 0.41 g):
   UFT: jatuh bila puncak SV_total > UFT
   LFT: jatuh bila lembah SV_total < LFT (fase jatuh bebas)
 Nilai UFT/LFT ada di configs/benchmarks/defaults.yaml.

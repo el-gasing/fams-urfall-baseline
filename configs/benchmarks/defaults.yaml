@@ -9,10 +9,11 @@ trigger:
   threshold_g: 3.0      # SV_total > ambang ini = "potential fall"
   merge_ms: 1000        # sampel di atas ambang yang berjarak < ini digabung jadi satu pemicu
 
-# Pembanding threshold murni (Tabel 2 paper, dari Bourke et al. 2007, sensor di batang tubuh)
+# Pembanding threshold murni (Tabel 2 paper Kwolek, dari Bourke et al. 2007).
+# Ambang sensor batang tubuh (sternum) Bourke 2007; untuk paha: 2.74 / 0.60.
 thresholds:
-  uft_g: 3.52           # jatuh bila max SV_total > UFT   (cek ulang ke paper Bourke 2007)
-  lft_g: 0.41           # jatuh bila min SV_total < LFT   (cek ulang ke paper Bourke 2007)
+  uft_g: 3.52           # jatuh bila max SV_total > UFT
+  lft_g: 0.41           # jatuh bila min SV_total < LFT
 
 # Tahap verifikasi pose (Bagian 5-6)
 verify:
